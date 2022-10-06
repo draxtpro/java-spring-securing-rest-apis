@@ -10,10 +10,13 @@ public class User implements Serializable {
     @Id
     private UUID id;
 
+    @Column
     private String username;
 
+    @Column
     private String password;
 
+    @Column
     protected boolean enabled = true;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

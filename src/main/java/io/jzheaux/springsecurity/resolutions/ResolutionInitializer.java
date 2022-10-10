@@ -8,7 +8,8 @@ public class ResolutionInitializer implements SmartInitializingSingleton {
     private static final String USER_PASSWORD = "{bcrypt}$2a$12$.dSqQCYlYTYTOhYMR.LQsOu4cdGn5q8p/LywFIARfmJp6EGG.cEBK";
 	private static final String RESOLUTION_READ_AUTHORITY = "resolution:read";
 	private static final String RESOLUTION_WRITE_AUTHORITY = "resolution:write";
-	private final ResolutionRepository resolutions;
+    private static final String RESOLUTION_ADMIN_AUTHORITY = "ROLE_ADMIN";
+    private final ResolutionRepository resolutions;
 
     private final UserRepository userRepository;
 
@@ -36,6 +37,12 @@ public class ResolutionInitializer implements SmartInitializingSingleton {
                 USER_PASSWORD);
         hasRead.grantAuthority(RESOLUTION_READ_AUTHORITY);
 
+        User admin = new User("admin",USER_PASSWORD);
+        admin.grantAuthority(RESOLUTION_ADMIN_AUTHORITY);
+        admin.grantAuthority(RESOLUTION_READ_AUTHORITY);
+        admin.grantAuthority(RESOLUTION_WRITE_AUTHORITY);
+
+        this.userRepository.save(admin);
         this.userRepository.save(hasBoth);
         this.userRepository.save(hasRead);
         this.userRepository.save(hasWrite);

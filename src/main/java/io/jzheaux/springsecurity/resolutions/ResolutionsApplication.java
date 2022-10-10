@@ -21,12 +21,15 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
         return new UserRepositoryUserDetailsService(userRepository);
     }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.authorizeRequests(authz -> authz
-						.anyRequest().authenticated())
-				.httpBasic(basic -> {})
-        .csrf().disable();
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests(authz -> authz
+                        .anyRequest().authenticated())
+                .httpBasic(basic -> {
+                })
+                .cors(cors -> {
+                })
+                .csrf().disable();
+    }
 }

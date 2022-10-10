@@ -15,7 +15,7 @@ public class ResolutionAuthorizer {
         }
 
         String name = operations.getAuthentication().getName();
-        Resolution resolution = (Resolution) operations.getReturnObject();
+        Resolution resolution = (Resolution) operations.getFilterObject();
         return resolution.getOwner().equals(name);
 
     }

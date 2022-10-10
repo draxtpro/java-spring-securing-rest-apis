@@ -6,12 +6,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class UserRepositoryUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    private BridgeUser map(User user){
+        Collection<GrantedAuthority> authorities = new HashSet<>();
+
+        user.getUserAuthorities().forEach(authority -> {
+            if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+                authorities.add(new SimpleGrantedAuthority("resolution:read"));
+                authorities.add(new SimpleGrantedAuthority("resolution:write"));
+            }
+            authorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        });
+        return new BridgeUser(user, authorities);
+    }
 
     public UserRepositoryUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -20,20 +33,20 @@ public class UserRepositoryUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return this.userRepository.findByUsername(username)
-                .map(BridgeUser::new)
+                .map(this::map)
                 .orElseThrow(() -> new UsernameNotFoundException("no user with that username"));
     }
 
     private static class BridgeUser extends User implements UserDetails {
-        public BridgeUser(User user) {
+        private final Collection<GrantedAuthority> authorities;
+
+        public BridgeUser(User user, Collection<GrantedAuthority> authorities) {
             super(user);
+            this.authorities= authorities;
         }
 
-        public List<GrantedAuthority> getAuthorities() {
-            return this.userAuthorities.stream()
-                    .map(UserAuthority::getAuthority)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return this.authorities;
         }
 
         public boolean isAccountNonExpired() {

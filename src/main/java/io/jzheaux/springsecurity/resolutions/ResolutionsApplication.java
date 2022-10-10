@@ -26,6 +26,7 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 		http
 				.authorizeRequests(authz -> authz
 						.anyRequest().authenticated())
-				.httpBasic(basic -> {});
+				.httpBasic(basic -> {})
+        .csrf().disable();
 	}
 }

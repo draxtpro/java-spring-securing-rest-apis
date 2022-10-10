@@ -17,7 +17,7 @@ public class ResolutionController {
 		this.resolutions = resolutions;
 	}
 
-	@CrossOrigin (maxAge = 0) //if locally verifying
+    @CrossOrigin(allowCredentials = "true")
 	@GetMapping("/resolutions")
 	@PreAuthorize("hasAuthority('resolution:read')")
 	@PostFilter("@post.filter(#root)")

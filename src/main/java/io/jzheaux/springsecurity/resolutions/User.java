@@ -88,27 +88,4 @@ public class User implements Serializable {
         return enabled;
     }
 
-    public static class UserBuilder {
-
-        private String username;
-        private String userPassword;
-        private List<String> authorities;
-
-        public UserBuilder(String username, String userPassword) {
-            this.username= username;
-            this.userPassword= userPassword;
-//            authorities.clear();
-        }
-
-        public UserBuilder grantAuthority(String authority){
-            this.authorities.add(authority);
-            return this;
-        }
-
-        public User build(){
-            User builtUser = new User(this.username, this.userPassword);
-            this.authorities.forEach(builtUser::grantAuthority);
-            return builtUser;
-        }
-    }
 }

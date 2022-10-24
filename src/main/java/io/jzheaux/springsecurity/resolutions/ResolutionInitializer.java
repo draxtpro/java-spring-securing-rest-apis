@@ -24,25 +24,30 @@ public class ResolutionInitializer implements SmartInitializingSingleton {
         this.resolutions.save(new Resolution("Free Solo the Eiffel Tower", "user"));
         this.resolutions.save(new Resolution("Hang Christmas Lights", "user"));
 
-        User hasBoth = new User("user",
+        User edEditor = new User("EdEditor",
                 USER_PASSWORD);
-        hasBoth.grantAuthority(RESOLUTION_READ_AUTHORITY);
-        hasBoth.grantAuthority(RESOLUTION_WRITE_AUTHORITY);
+        edEditor.setFullName("Ed Schreiberlesling");
+        edEditor.grantAuthority(RESOLUTION_READ_AUTHORITY);
+        edEditor.grantAuthority(RESOLUTION_WRITE_AUTHORITY);
 
-        User hasWrite = new User("haswrite",
+        User markEditor = new User("MarkEditor",
                 USER_PASSWORD);
-        hasWrite.grantAuthority(RESOLUTION_WRITE_AUTHORITY);
+        markEditor.setFullName("Mark Operator");
+        markEditor.grantAuthority(RESOLUTION_READ_AUTHORITY);
+        markEditor.grantAuthority(RESOLUTION_WRITE_AUTHORITY);
 
-        User hasRead = new User("hasread",
+        User liesd = new User("hasread",
                 USER_PASSWORD);
-        hasRead.grantAuthority(RESOLUTION_READ_AUTHORITY);
+        liesd.setFullName("Liesd von Selbst");
+        liesd.grantAuthority(RESOLUTION_READ_AUTHORITY);
 
         User admin = new User("admin",USER_PASSWORD);
+        admin.setFullName("Adminus Dominskus");
         admin.grantAuthority(RESOLUTION_ADMIN_AUTHORITY);
 
         this.userRepository.save(admin);
-        this.userRepository.save(hasBoth);
-        this.userRepository.save(hasRead);
-        this.userRepository.save(hasWrite);
+        this.userRepository.save(edEditor);
+        this.userRepository.save(liesd);
+        this.userRepository.save(markEditor);
     }
 }

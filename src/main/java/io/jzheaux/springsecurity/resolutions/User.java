@@ -10,6 +10,8 @@ public class User implements Serializable {
     @Id
     private UUID id;
 
+    @Column(name = "full_name")
+    private String fullName;
     @Column
     private String username;
 
@@ -34,6 +36,7 @@ public class User implements Serializable {
 
     public User(User user) {
         this.id = user.id;
+        this.fullName = user.fullName;
         this.username = user.username;
         this.password = user.password;
         this.enabled = user.enabled;
@@ -73,12 +76,16 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public static class UserBuilder {
@@ -90,7 +97,7 @@ public class User implements Serializable {
         public UserBuilder(String username, String userPassword) {
             this.username= username;
             this.userPassword= userPassword;
-            authorities.clear();
+//            authorities.clear();
         }
 
         public UserBuilder grantAuthority(String authority){

@@ -1,5 +1,6 @@
 package io.jzheaux.springsecurity.resolutions;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    UserRepositoryJwtAuthenticationConverter authenticationConverter;
+
     public static void main(String[] args) {
         SpringApplication.run(ResolutionsApplication.class, args);
     }
@@ -33,14 +37,15 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated())
                 .httpBasic(basic -> {
                 })
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt().jwtAuthenticationConverter(this.authenticationConverter))
                 .cors(cors -> {
                 })
                 .csrf().disable();
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurer(){
+    public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
@@ -51,14 +56,5 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
                         .allowedHeaders("Authorization");
             }
         };
-    }
-
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter(){
-        JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
-        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("");
-        authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-        return authenticationConverter;
     }
 }

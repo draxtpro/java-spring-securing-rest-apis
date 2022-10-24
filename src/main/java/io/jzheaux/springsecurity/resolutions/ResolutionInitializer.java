@@ -30,6 +30,12 @@ public class ResolutionInitializer implements SmartInitializingSingleton {
                         .withGrantedAuthority(RESOLUTION_READ_AUTHORITY)
                         .withGrantedAuthority(RESOLUTION_WRITE_AUTHORITY).build();
 
+        User testUser =
+                new UserBuilder("user", USER_PASSWORD)
+                        .withFullName("User Testling")
+                        .withGrantedAuthority(RESOLUTION_READ_AUTHORITY)
+                        .withGrantedAuthority(RESOLUTION_WRITE_AUTHORITY).build();
+
         User markEditor =
                 new UserBuilder("MarkEditor",
                         USER_PASSWORD).withFullName("Mark Operator")
@@ -51,5 +57,6 @@ public class ResolutionInitializer implements SmartInitializingSingleton {
         this.userRepository.save(edEditor);
         this.userRepository.save(liesd);
         this.userRepository.save(markEditor);
+        this.userRepository.save(testUser);
     }
 }
